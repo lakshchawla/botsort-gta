@@ -1,0 +1,28 @@
+# nvinfer SGIE: MSMT17 CLIP-ReID embedder (gie-unique-id 2). Runs on every person the PGIE (gie 1) finds and
+# attaches the raw 1280-d output tensor to each object (output-tensor-meta); BoT-SORT reads it in a probe.
+# Model: models/reid/msmt17_clipreid_12x12sie_vitb16.onnx (tools/export_clipreid_onnx.py). Input 3x256x128 RGB,
+# pixels mapped by (x - 127.5) / 127.5, no aspect-ratio keeping - exactly how the model was trained.
+property:
+  gpu-id: 0
+  net-scale-factor: 0.00784313725490196
+  offsets: 127.5;127.5;127.5
+  model-color-format: 0
+  onnx-file: /home/lakshh/workspace/kmrt_infer/ds_pipeline/global_tracker/models/reid/msmt17_clipreid_12x12sie_vitb16.onnx
+  model-engine-file: /home/lakshh/workspace/kmrt_infer/ds_pipeline/global_tracker/models/reid/msmt17_clipreid_12x12sie_vitb16.onnx_b32_gpu0_fp16.engine   # nvinfer's own naming; built on the first run
+  infer-dims: 3;256;128
+  batch-size: 32
+  network-mode: 2            # fp16
+  network-type: 100          # 'other': no parsing, the output tensor is passed on as meta
+  output-tensor-meta: 1
+  interval: 0
+  process-mode: 2            # secondary: runs on objects
+  operate-on-gie-id: 1
+  operate-on-class-ids: 1    # persons
+  gie-unique-id: 2
+  maintain-aspect-ratio: 0
+  scaling-compute-hw: 1
+  workspace-size: 4000
+  classifier-threshold: 0
+  # BoT-SORT needs an embedding for every detection it sees: do not skip small people
+  input-object-min-width: 4
+  input-object-min-height: 8

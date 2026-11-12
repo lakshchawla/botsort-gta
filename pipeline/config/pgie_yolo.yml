@@ -1,0 +1,30 @@
+# nvinfer PGIE: YOLO11 person/luggage/wheelchair (gie-unique-id 1).
+# Model artifacts are referenced in place from DSMetroPerception_py (not copied).
+# Class ids follow labels.txt: 0=luggage 1=person 2=wheelchair.
+property:
+  gpu-id: 0
+  net-scale-factor: 0.003921569790691137
+  model-color-format: 0
+  onnx-file: /home/lakshh/workspace/kmrt_infer/ds_pipeline/DSMetroPerception_py/models/m1_plw/yolo11all_best.onnx
+  model-engine-file: /home/lakshh/workspace/kmrt_infer/ds_pipeline/DSMetroPerception_py/models/m1_plw/model_b4_gpu0_fp16.engine
+  labelfile-path: labels.txt
+  batch-size: 4
+  network-mode: 2
+  num-detected-classes: 3
+  interval: 0
+  gie-unique-id: 1
+  filter-out-class-ids: 0;2     # persons only: drop luggage (0) and wheelchair (2)
+  process-mode: 1
+  network-type: 0
+  cluster-mode: 2
+  maintain-aspect-ratio: 1
+  symmetric-padding: 1
+  workspace-size: 4000
+  parse-bbox-func-name: NvDsInferParseYolo
+  custom-lib-path: /home/lakshh/workspace/kmrt_infer/ds_pipeline/DSMetroPerception_py/ds_include/m1_plw/nvdsinfer_custom_impl_Yolo/libnvdsinfer_custom_impl_Yolo.so
+  engine-create-func-name: NvDsInferYoloCudaEngineGet
+
+class-attrs-all:
+  nms-iou-threshold: 0.45
+  pre-cluster-threshold: 0.4
+  topk: 300

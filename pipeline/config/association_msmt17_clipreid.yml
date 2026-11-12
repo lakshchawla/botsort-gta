@@ -1,0 +1,38 @@
+# Association v1 (fast-commit) settings for the MSMT17 CLIP-ReID embedder (1280-d).
+# The distance thresholds are the ones first tuned for the 5120-d holistic ReID model, rescaled, because this
+# model's cosine distances live on about HALF the scale:
+#   median distance between tracklets that are certainly different people (same camera, simultaneous):
+#       holistic 0.236   ->   MSMT17 CLIP-ReID 0.121      (ratio 0.51)
+#   median distance within one tracklet (newest sample vs its 50-sample mean):
+#       holistic 0.056   ->   MSMT17 CLIP-ReID 0.025
+# so the three distance thresholds are the holistic ones x 0.51 (same operating point on that distribution).
+min_tracklet_len: 15
+min_embeddings: 2
+mint_min_embeddings: 4
+
+fast_commit_thresh: 0.13        # holistic 0.25
+min_margin: 0.035               # holistic 0.07
+ambiguous_patience_frames: 45
+ema_alpha: 0.8
+
+outlier_reject_thresh: 0.15     # holistic 0.30
+revoke_streak: 5
+
+overlap_freeze_thresh: 0.2
+overlap_cooldown_frames: 10
+co_occurrence_tol_frames: 5
+use_gpu: false
+
+# Varied views (association level). A clean sample that no longer looks like the identity (distance to its moving
+# average or any stored view >= view_suspect_dist) is quarantined in tmp_varied_views (3) and the identity is NOT
+# updated with it. If the distance settles back, the quarantined samples become varied_views (8): a new silhouette /
+# pose of the same body. If it stays high for view_confirm_frames samples, the id moved to another body: the
+# tracklet gives the id up, its embedding is rebuilt from those samples, and the association step runs again.
+views_enabled: true
+view_suspect_dist: 0.06
+view_settle_ratio: 0.8
+view_confirm_frames: 4
+view_dedup_dist: 0.02
+views_size: 8
+tmp_views_size: 3
+views_in_search: true

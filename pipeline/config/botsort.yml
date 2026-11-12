@@ -1,0 +1,31 @@
+# BoT-SORT parameters (upstream NirAharon/BoT-SORT semantics). Detector confidences start at the PGIE's
+# pre-cluster-threshold (0.4), so detections are 0.4..1.0.
+track_high_thresh: 0.6      # detections above this take part in the first (IoU + appearance) association
+track_low_thresh: 0.1       # 0.1..high: second, IoU-only association with still-unmatched tracks
+new_track_thresh: 0.6       # a new track starts from an unmatched detection at least this confident
+track_buffer: 600           # frames a lost track stays re-findable (20 s at 30 fps)
+match_thresh: 0.8
+proximity_thresh: 0.5       # appearance only counts where IoU distance <= this
+cmc_method: none            # camera motion compensation off: fixed cameras (and it would need frame pixels)
+mot20: false
+frame_rate: 30
+
+# appearance_thresh is on the repo's scale: (cosine distance / 2), compared against its fused cost. Set to the
+# 95th percentile of the distance between the newest embedding of a tracklet and the tracklet's own mean for
+# the MSMT17 CLIP-ReID model (cosine 0.109, measured on these cameras) -> 0.109 / 2 = 0.055. Pairs further apart
+# than that fall back to the IoU cost. For another ReID model, re-measure (see association_*.yml for how).
+appearance_thresh: 0.055
+
+# Track split: BoT-SORT keeps matching a box by IoU, so a box can slide from one person to another while the track id
+# stays (the appearance cost only helps a match, it never vetoes one). ShiftGuard watches the track's embeddings against a
+# SLOW reference; when they jump to a distance >= split_dist and stay there for split_confirm frames, the track is ended
+# and the detection continues under a new id. split_dist 0.10 comes from the confirmed swaps in these videos
+# (peak distances 0.11-0.16, in a model where two different people are ~0.12 apart); tracks cut by the frame edge are ignored.
+split_enabled: true
+split_dist: 0.10
+split_confirm: 3
+split_settle_ratio: 0.8
+split_skip_edge: true
+edge_margin: 20
+frame_w: 1920
+frame_h: 1080
