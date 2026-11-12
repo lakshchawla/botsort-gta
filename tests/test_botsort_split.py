@@ -1,10 +1,11 @@
+import os
 import numpy as np
 import pytest
 
 from tracker.botsort_backend import BotSortCore
 from tracker.shift_guard import ShiftGuard
 
-REPO = "/home/lakshh/workspace/kmrt_infer/ds_pipeline/tracker"
+REPO = os.environ.get("BOTSORT_REPO", os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "third_party", "BoT-SORT"))
 rng = np.random.default_rng(11)
 
 

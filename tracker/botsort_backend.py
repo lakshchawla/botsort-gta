@@ -209,7 +209,9 @@ class BotSortBackend:
         if isinstance(params, str):
             with open(resolve(params)) as f:
                 params = yaml.safe_load(f) or {}
-        self.core = BotSortCore(cfg.get("repo_root", "~/workspace/kmrt_infer/ds_pipeline/tracker"), params)
+        default_repo = os.environ.get("BOTSORT_REPO") or os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "..", "..", "third_party", "BoT-SORT")
+        self.core = BotSortCore(resolve(cfg.get("repo_root", default_repo)), params)
         self.sgie_config = resolve(cfg["sgie"]["config-file"])
         self.sgie_id = int(cfg["sgie"].get("unique-id", 2))
         self.person_class_id = person_class_id

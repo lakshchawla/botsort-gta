@@ -27,7 +27,7 @@ import os
 import sys
 from typing import Dict, Tuple
 
-CLIP_REID_ROOT = "/home/lakshh/workspace/reid/CLIP-ReID"
+CLIP_REID_ROOT = os.environ.get("CLIP_REID_ROOT", "CLIP-ReID")   # path to a CLIP-ReID checkout
 
 
 def infer_from_state_dict(sd: Dict[str, "torch.Tensor"], size: Tuple[int, int] = (256, 128)) -> dict:

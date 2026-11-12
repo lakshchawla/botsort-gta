@@ -10,7 +10,7 @@ pgie:
 
 # Per-camera tracker: BoT-SORT runs in a probe after the ReID SGIE (PGIE -> SGIE -> [probe: BoT-SORT]).
 tracker:
-  repo_root: /home/lakshh/workspace/kmrt_infer/ds_pipeline/tracker   # checkout of github.com/NirAharon/BoT-SORT
+  repo_root: ../../../third_party/BoT-SORT   # upstream github.com/NirAharon/BoT-SORT (tracker/ only), relative to this file
   params: botsort.yml                   # tracker parameters (relative to this file)
   sgie:
     config-file: sgie_reid_msmt17.yml   # the MSMT17 CLIP-ReID embedder, run as a secondary GIE

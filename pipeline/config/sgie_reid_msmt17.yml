@@ -7,8 +7,8 @@ property:
   net-scale-factor: 0.00784313725490196
   offsets: 127.5;127.5;127.5
   model-color-format: 0
-  onnx-file: /home/lakshh/workspace/kmrt_infer/ds_pipeline/global_tracker/models/reid/msmt17_clipreid_12x12sie_vitb16.onnx
-  model-engine-file: /home/lakshh/workspace/kmrt_infer/ds_pipeline/global_tracker/models/reid/msmt17_clipreid_12x12sie_vitb16.onnx_b32_gpu0_fp16.engine   # nvinfer's own naming; built on the first run
+  onnx-file: ../../../../../models/m1a_reid/msmt17_clipreid_12x12sie_vitb16.onnx
+  model-engine-file: ../../../../../models/m1a_reid/msmt17_clipreid_12x12sie_vitb16.onnx_b32_gpu0_fp16.engine   # nvinfer's own naming; built on the first run
   infer-dims: 3;256;128
   batch-size: 32
   network-mode: 2            # fp16

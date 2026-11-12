@@ -5,8 +5,8 @@ property:
   gpu-id: 0
   net-scale-factor: 0.003921569790691137
   model-color-format: 0
-  onnx-file: /home/lakshh/workspace/kmrt_infer/ds_pipeline/DSMetroPerception_py/models/m1_plw/yolo11all_best.onnx
-  model-engine-file: /home/lakshh/workspace/kmrt_infer/ds_pipeline/DSMetroPerception_py/models/m1_plw/model_b4_gpu0_fp16.engine
+  onnx-file: ../../../../../models/m1_plw/yolo11all_best.onnx
+  model-engine-file: ../../../../../models/m1_plw/model_b4_gpu0_fp16.engine
   labelfile-path: labels.txt
   batch-size: 4
   network-mode: 2
@@ -21,7 +21,7 @@ property:
   symmetric-padding: 1
   workspace-size: 4000
   parse-bbox-func-name: NvDsInferParseYolo
-  custom-lib-path: /home/lakshh/workspace/kmrt_infer/ds_pipeline/DSMetroPerception_py/ds_include/m1_plw/nvdsinfer_custom_impl_Yolo/libnvdsinfer_custom_impl_Yolo.so
+  custom-lib-path: ../../../../../ds_include/m1_plw/nvdsinfer_custom_impl_Yolo/libnvdsinfer_custom_impl_Yolo.so
   engine-create-func-name: NvDsInferYoloCudaEngineGet
 
 class-attrs-all:
