@@ -1,0 +1,37 @@
+# Raw DeepStream pipeline config: sources -> nvstreammux -> PGIE -> ReID SGIE -> BoT-SORT probe -> sink
+streammux:
+  width: 1920
+  height: 1080
+  batched-push-timeout: 33000
+
+pgie:
+  config-file: pgie_yolo.yml
+  unique-id: 1
+
+# Per-camera tracker: BoT-SORT runs in a probe after the ReID SGIE (PGIE -> SGIE -> [probe: BoT-SORT]).
+tracker:
+  repo_root: ../../../third_party/BoT-SORT   # upstream github.com/NirAharon/BoT-SORT (tracker/ only), relative to this file
+  params: botsort.yml                   # tracker parameters (relative to this file)
+  sgie:
+    config-file: sgie_reid_msmt17.yml   # the MSMT17 CLIP-ReID embedder, run as a secondary GIE
+    unique-id: 2
+
+sink:
+  type: fakesink       # fakesink | display
+  sync: true           # pace to buffer timestamps = each video's native fps
+  tile-width: 960      # per-tile width for display; tile height is derived (16:9)
+  grid: [2, 2]         # rows, columns; 3 sources -> the 4th tile stays blank
+
+# roi: polygons (streammux px) where a person counts as "clean" for ReID/global tracking.
+# Same ROIs as DSMetroPerception_py's multi_app_config.yml m1a_reid; omitted = whole frame.
+sources:
+  - name: cam1
+    uri: file:///home/lakshh/workspace/fire_smoke/research/captures/rtsp0_20260727_163228.mp4
+    roi:
+      - [[221, 801], [233, 827], [381, 890], [619, 972], [952, 1042], [1279, 1068], [1361, 445], [1037, 433], [223, 797]]
+  - name: cam2
+    uri: file:///home/lakshh/workspace/fire_smoke/research/captures/rtsp1_20260727_163228.mp4
+    roi:
+      - [[4, 722], [837, 479], [1660, 534], [1482, 1069], [1452, 1076], [4, 1075], [2, 722]]
+  - name: cam3
+    uri: file:///home/lakshh/workspace/fire_smoke/research/captures/rtsp2_20260727_163228.mp4

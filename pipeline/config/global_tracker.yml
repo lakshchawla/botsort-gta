@@ -1,0 +1,32 @@
+# Global (cross-camera) tracker on top of the per-camera tracklets.
+frame_rate: 30.0
+classes: [1]                    # global identity only for 'person' (labels.txt: 0 luggage, 1 person, 2 wheelchair)
+
+tracklet:
+  edge_margin: 20               # px; box within this of the frame border = touching edge
+  left_grace_frames: 51         # absent this long -> tracklet LEFT. run.py raises it to BoT-SORT's track_buffer, because
+                                #   BoT-SORT re-uses a lost id until then
+  peer_iou_thresh: 0.2          # occlusion: IoU with another person above this = not clean (old OCCLUSION_IOU)
+  ema_alpha: 0.8                # tracklet-level moving average of its ReID samples
+  smooth_window: 50             # smooth feature = mean of the last N accepted ReID samples (feature dump)
+  # Image-quality gate: a crop failing any of these is not "clean", so it feeds neither the tracklet embedding nor the
+  # association, and cannot become the tracklet's picture. Measured on all 22.8k samples of these videos against the true
+  # sharpness of the crop and against embedding noise (distance to the track's median embedding):
+  #   speed   box heights moved per frame (blur proxy): corr with sharpness -0.41, with noise +0.36; > 0.04 removes 5.6%,
+  #           those are blurrier (Laplacian 1699 vs 2615) and 1.5x noisier
+  #   aspect  width / height: > 0.65 removes 7.1%, those are 1.9x noisier (running, arms out, two people in one box)
+  #   norm    length of the raw SGIE vector (model-specific, re-measure for another model): < 22.40 removes 11%, 2.6x noisier
+  #   height  boxes shorter than this many pixels are too small to carry identity
+  # Coverage by another person was NOT added: it did not make embeddings noisier in this data.
+  quality:
+    max_speed: 0.04
+    max_aspect: 0.65
+    min_emb_norm: 22.40
+    min_height: 64
+# Which association logic runs. Any module/file with a step(cam_id, live_tracklets, frame) works
+# (contract: association/base.py). Override on the command line with --assoc / --assoc-config.
+association:
+  module: association.associator       # dotted import path ...
+  # path: /abs/or/relative/file.py      # ... or a .py file (relative to this config's directory)
+  cls: Associator                       # omit to use a module-level step() function
+  config: association_msmt17_clipreid.yml   # thresholds matched to the MSMT17 CLIP-ReID model

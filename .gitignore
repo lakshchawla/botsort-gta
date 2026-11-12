@@ -1,2 +1,13 @@
 __pycache__/
 *.pyc
+.pytest_cache/
+logs/
+traces/
+annotation*/
+*.mp4
+*.npy
+models/
+*.onnx
+*.onnx.data
+*.engine
+*.ipynb
